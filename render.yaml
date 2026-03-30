@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: redline-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: DB_PATH
+        value: /data/redline.db
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"
+    disk:
+      name: redline-data
+      mountPath: /data
+      sizeGB: 1
+
+  - type: web
+    name: redline-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: redline-backend
+          type: web
+          property: host
