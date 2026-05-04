@@ -108,3 +108,12 @@ async def global_metrics():
 async def get_ollama_models(base_url: str = "http://localhost:11434"):
     models = await list_ollama_models(base_url)
     return {"models": models}
+
+
+''' cd backend 
+python -m uvicorn main:app --reload
+
+cd frontend
+npm run dev
+
+'''
